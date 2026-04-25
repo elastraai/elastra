@@ -1,0 +1,10 @@
+name: Elastra MCP
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: elastra
+    type: stdio
+    command: "/home/jmsilvadev/.elastra/bin/elastra"
+    args:
+      - "mcp"
+      - "serve"

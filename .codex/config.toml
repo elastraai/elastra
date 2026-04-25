@@ -1,0 +1,8 @@
+# Elastra MCP server (added by elastra mcp install)
+[mcp_servers.elastra]
+command = "/home/jmsilvadev/.elastra/bin/elastra"
+args = ["mcp", "serve"]
+env = { ELASTRA_AGENT = "codex" }
+
+[mcp_servers.elastra.tools.elastra_memory_write]
+approval_mode = "approve"

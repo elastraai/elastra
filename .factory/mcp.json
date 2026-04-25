@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "elastra": {
+      "args": [
+        "mcp",
+        "serve"
+      ],
+      "command": "/home/jmsilvadev/.elastra/bin/elastra",
+      "disabled": false,
+      "type": "stdio"
+    }
+  }
+}

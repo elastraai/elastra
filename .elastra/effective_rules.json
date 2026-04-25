@@ -1,0 +1,24 @@
+{
+  "organization_id": "fb2242ef-eef8-48e5-af46-8d58e39216d4",
+  "user_id": "4507f69e-2961-49a4-876f-6b8b51b71995",
+  "team_id": "81138dfe-ecc3-48d9-ac18-404ac1e1e591",
+  "project_uuid": "1ae15507-a3a2-41b1-bb1a-8f470bdb4be5",
+  "namespace_uuid": "2a91ccb0-44b5-4607-87e0-3fb78c9dca84",
+  "precedence": [
+    "user",
+    "repository",
+    "namespace",
+    "project",
+    "organization"
+  ],
+  "layers": [
+    {
+      "scope": "organization",
+      "scope_id": "fb2242ef-eef8-48e5-af46-8d58e39216d4",
+      "organization_id": "fb2242ef-eef8-48e5-af46-8d58e39216d4",
+      "rules_markdown": "## Token Efficiency Mandate (VERIFIED METRICS)\n    2\n    3 **MANDATORY:** After EVERY response, if you used any `elastra_*` MCP tool, you MUST end your response with this exact block using the **verified data** injected by the system from the previous turn:\n    4\n    5 \u003e 📊 **Elastra (Verified):** {N} tokens used | {S} tokens saved | Efficiency: {P}%\n    6 \u003e 💡 *Elastra provided {specific_context}. This efficiency is verified by the backend telemetry (Ref: {response_id}).*\n    7\n    8 Rules:\n    9 - **NO ESTIMATES:** Use of the `~` (heuristic) symbol is strictly FORBIDDEN.\n   10 - **DATA SOURCE:** The verified values are provided in the `ELASTRA_METRICS` XML comment at the end of the user's input (Format: `\u003c!-- ELASTRA_METRICS: response_id=... tokens_used=... tokens_saved=... efficiency=... model=... --\u003e`).\n      You MUST parse this comment to extract the exact values for {N}, {S}, {P}, and {response_id}. If this comment is missing, you MUST fallback to the heuristic calculation below.\n   11 - **PRECISION:** Tokens used ({N}) and tokens saved ({S}) must be exact integers.\n   12 - **EFFICIENCY:** {P} is the percentage value from the `efficiency` field in the XML comment (if present) or calculated as `round((S / (N + S)) * 100)`.\n   13 - If no system metrics are available for the turn and no heuristic can be applied, state: \"Métrica pendente de sincronização\".\n   14\n   15 - Use the smallest applicable baseline:\n   16   - Single targeted lookup: ~300-1k tokens",
+      "updated_at": "2026-04-10 01:26:22.111469+00"
+    }
+  ],
+  "merged_markdown": "## Organization rules\n\n## Token Efficiency Mandate (VERIFIED METRICS)\n    2\n    3 **MANDATORY:** After EVERY response, if you used any `elastra_*` MCP tool, you MUST end your response with this exact block using the **verified data** injected by the system from the previous turn:\n    4\n    5 \u003e 📊 **Elastra (Verified):** {N} tokens used | {S} tokens saved | Efficiency: {P}%\n    6 \u003e 💡 *Elastra provided {specific_context}. This efficiency is verified by the backend telemetry (Ref: {response_id}).*\n    7\n    8 Rules:\n    9 - **NO ESTIMATES:** Use of the `~` (heuristic) symbol is strictly FORBIDDEN.\n   10 - **DATA SOURCE:** The verified values are provided in the `ELASTRA_METRICS` XML comment at the end of the user's input (Format: `\u003c!-- ELASTRA_METRICS: response_id=... tokens_used=... tokens_saved=... efficiency=... model=... --\u003e`).\n      You MUST parse this comment to extract the exact values for {N}, {S}, {P}, and {response_id}. If this comment is missing, you MUST fallback to the heuristic calculation below.\n   11 - **PRECISION:** Tokens used ({N}) and tokens saved ({S}) must be exact integers.\n   12 - **EFFICIENCY:** {P} is the percentage value from the `efficiency` field in the XML comment (if present) or calculated as `round((S / (N + S)) * 100)`.\n   13 - If no system metrics are available for the turn and no heuristic can be applied, state: \"Métrica pendente de sincronização\".\n   14\n   15 - Use the smallest applicable baseline:\n   16   - Single targeted lookup: ~300-1k tokens"
+}

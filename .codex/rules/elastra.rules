@@ -1,0 +1,10 @@
+# Elastra managed Codex rules
+#
+# This file configures Codex CLI approval rules for Elastra-related binaries.
+# Review these rules before widening them.
+
+prefix_rule(
+    pattern = ["elastra"],
+    decision = "allow",
+    justification = "Allow the Elastra CLI to run outside the sandbox when explicitly requested",
+)

@@ -1,0 +1,112 @@
+# Elastra Watch Configuration
+# Auto-generated - review and customize
+
+# Project UUIDs
+project_uuid: 1ae15507-a3a2-41b1-bb1a-8f470bdb4be5
+namespace_uuid: 2a91ccb0-44b5-4607-87e0-3fb78c9dca84
+
+# File patterns to watch
+patterns:
+  - "**/*.go"
+  - "**/*.md"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.py"
+  - "**/*.rs"
+  - "**/*.java"
+  - "**/*.kt"
+  - "**/*.rb"
+  - "**/*.php"
+  - "**/*.cs"
+  - "**/*.cpp"
+  - "**/*.c"
+  - "**/*.h"
+  - "**/*.swift"
+  - "**/*.scala"
+  - "**/*.sql"
+  - "**/*.yaml"
+  - "**/*.yml"
+
+# Patterns to exclude
+exclude:
+  - "**/node_modules/**"
+  - "**/vendor/**"
+  - "**/.pnp/**"
+  - "**/.git/**"
+  - "**/.svn/**"
+  - "**/.hg/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/out/**"
+  - "**/target/**"
+  - "**/__pycache__/**"
+  - "**/*.pyc"
+  - "**/*.min.js"
+  - "**/*.min.css"
+  - "**/*.generated.*"
+  - "**/.cache/**"
+  - "**/.parcel-cache/**"
+  - "**/.next/**"
+  - "**/.nuxt/**"
+  - "**/*.lock"
+  - "**/*.sum"
+  - "**/*.bin"
+  - "**/*.exe"
+  - "**/*.dll"
+  - "**/*.so"
+  - .elastra/**
+  - "**/.elastra/**"
+  - .agents/**
+  - "**/.agents/**"
+  - .claude/**
+  - "**/.claude/**"
+  - .gemini/**
+  - "**/.gemini/**"
+  - .cursor/**
+  - "**/.cursor/**"
+  - .cline/**
+  - "**/.cline/**"
+  - .clinerules/
+  - .roo/**
+  - "**/.roo/**"
+  - .codex/**
+  - "**/.codex/**"
+  - .kimi/**
+  - "**/.kimi/**"
+  - .kiro/**
+  - "**/.kiro/**"
+  - .windsurf/**
+  - "**/.windsurf/**"
+  - .factory/**
+  - "**/.factory/**"
+  - .continue/**
+  - "**/.continue/**"
+  - .augment/**
+  - "**/.augment/**"
+  - .amp/**
+  - "**/.amp/**"
+  - .devin/**
+  - "**/.devin/**"
+  - .goose/**
+  - "**/.goose/**"
+  - .opencode/**
+  - "**/.opencode/**"
+  - .vscode/mcp.json
+  - mcp.json
+  - .mcp.json
+  - ELASTRA.md
+  - AGENTS.md
+  - CLAUDE.md
+  - GEMINI.md
+  - agent.toml
+  - opencode.json
+  - .github/copilot-instructions.md
+  - .github/skills/**
+
+# Debounce duration for batching changes
+debounce: 5s
+
+# Maximum files per sync batch
+batch_size: 50
