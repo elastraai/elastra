@@ -4,6 +4,15 @@ Public landing page for the Elastra on-prem runtime.
 
 The public Docker image is published separately. This repository intentionally does not contain private runtime internals, database schema, bootstrap SQL, or release operations material.
 
+## License
+
+The Elastra Public Runtime Edition is licensed, not sold.
+
+- Proprietary license for internal customer use only
+- No redistribution of the Docker image, binaries, or runtime artifacts to third parties
+- No use as a hosted SaaS, managed service, MSP, OEM, or white-label platform for third parties
+- Full terms: https://help.elastra.ai/on-prem
+
 ## Documentation
 
 Full product documentation:
