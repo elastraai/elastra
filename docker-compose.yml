@@ -1,0 +1,111 @@
+name: elastra-public
+
+services:
+  api:
+    image: ${ELASTRA_IMAGE:-ghcr.io/elastraai/elastra}:${ELASTRA_VERSION:-latest}
+    entrypoint: ["/usr/local/bin/elastra-api"]
+    environment:
+      APP_ENV: production
+      POSTGRES_DSN: postgres://elastra:elastra@postgres:5432/elastra?sslmode=disable
+      REDIS_PASSWORD: elastra
+      ELASTRA_RUNTIME_EDITION: public
+      ELASTRA_ALLOWED_TOPOLOGY: single_customer_internal
+      ELASTRA_INSTALLATION_NAME: ${ELASTRA_INSTALLATION_NAME:-local-runtime}
+      ELASTRA_BOOTSTRAP_ADMIN_EMAIL: ${ELASTRA_BOOTSTRAP_ADMIN_EMAIL:-admin@example.com}
+      ELASTRA_BOOTSTRAP_ADMIN_NAME: ${ELASTRA_BOOTSTRAP_ADMIN_NAME:-Elastra Admin}
+      ELASTRA_BOOTSTRAP_ADMIN_PASSWORD: ${ELASTRA_BOOTSTRAP_ADMIN_PASSWORD:-adminadmin}
+    ports:
+      - "${ELASTRA_HTTP_PORT:-8080}:8080"
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      qdrant:
+        condition: service_started
+      minio:
+        condition: service_started
+
+  worker:
+    image: ${ELASTRA_IMAGE:-ghcr.io/elastraai/elastra}:${ELASTRA_VERSION:-latest}
+    entrypoint: ["/usr/local/bin/elastra-worker"]
+    environment:
+      APP_ENV: production
+      POSTGRES_DSN: postgres://elastra:elastra@postgres:5432/elastra?sslmode=disable
+      REDIS_PASSWORD: elastra
+      ELASTRA_RUNTIME_EDITION: public
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      qdrant:
+        condition: service_started
+      minio:
+        condition: service_started
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: elastra
+      POSTGRES_USER: elastra
+      POSTGRES_PASSWORD: elastra
+    ports:
+      - "${ELASTRA_POSTGRES_BIND:-127.0.0.1:5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U elastra -d elastra"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - public_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    command: ["redis-server", "--requirepass", "elastra"]
+    expose:
+      - "6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"elastra\" PING | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:v1.13.4
+    ports:
+      - "${ELASTRA_QDRANT_HTTP_PORT:-6333}:6333"
+      - "${ELASTRA_QDRANT_GRPC_PORT:-6334}:6334"
+    environment:
+      QDRANT__STORAGE__ON_DISK_PAYLOAD: "true"
+      QDRANT__STORAGE__MEMMAP_THRESHOLD: "200000"
+    volumes:
+      - public_qdrantdata:/qdrant/storage
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "${ELASTRA_MINIO_PORT:-9000}:9000"
+      - "${ELASTRA_MINIO_CONSOLE_PORT:-9001}:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - public_miniodata:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  public_pgdata:
+  public_qdrantdata:
+  public_miniodata:
