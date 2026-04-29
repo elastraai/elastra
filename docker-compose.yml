@@ -15,7 +15,7 @@ services:
       ELASTRA_BOOTSTRAP_ADMIN_NAME: ${ELASTRA_BOOTSTRAP_ADMIN_NAME:-Elastra Admin}
       ELASTRA_BOOTSTRAP_ADMIN_PASSWORD: ${ELASTRA_BOOTSTRAP_ADMIN_PASSWORD:-adminadmin}
       OLLAMA_URL: http://ollama:11434
-      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-embeddinggemma}
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-nomic-embed-text}
     ports:
       - "${ELASTRA_HTTP_PORT:-8080}:8080"
     restart: unless-stopped
@@ -40,7 +40,7 @@ services:
       REDIS_PASSWORD: elastra
       ELASTRA_RUNTIME_EDITION: public
       OLLAMA_URL: http://ollama:11434
-      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-embeddinggemma}
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-nomic-embed-text}
     restart: unless-stopped
     depends_on:
       postgres:
@@ -117,10 +117,14 @@ services:
     image: ollama/ollama:latest
     expose:
       - "11434"
+    environment:
+      OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE:-0}
+      OLLAMA_MAX_LOADED_MODELS: ${OLLAMA_MAX_LOADED_MODELS:-1}
+      OLLAMA_NUM_PARALLEL: ${OLLAMA_NUM_PARALLEL:-1}
     volumes:
       - public_ollamadata:/root/.ollama
     healthcheck:
-      test: ["CMD", "ollama", "list"]
+      test: ["CMD", "curl", "-fsS", "http://localhost:11434/api/tags"]
       interval: 15s
       timeout: 10s
       retries: 20
@@ -130,7 +134,7 @@ services:
     image: ollama/ollama:latest
     environment:
       OLLAMA_HOST: http://ollama:11434
-      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-embeddinggemma}
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-nomic-embed-text}
     entrypoint: ["/bin/sh", "-lc", "ollama pull \"$${OLLAMA_EMBEDDING_MODEL}\""]
     depends_on:
       ollama:
