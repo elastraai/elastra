@@ -37,6 +37,8 @@ curl -fsSL https://raw.githubusercontent.com/elastraai/elastra/main/docker-compo
 docker compose up -d
 ```
 
+The on-prem compose starts a local `ollama` service and preloads the embeddings model used by the runtime. The first startup can take longer while that model is downloaded.
+
 The web UI is available at:
 
 ```text
@@ -71,4 +73,4 @@ ghcr.io/elastraai/elastra
 ## Notes
 
 - `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` are optional for baseline runtime operation.
-- The public runtime can operate with its internal embeddings generator.
+- The on-prem compose includes local Ollama for embeddings by default.

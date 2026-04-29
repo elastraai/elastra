@@ -14,6 +14,8 @@ services:
       ELASTRA_BOOTSTRAP_ADMIN_EMAIL: ${ELASTRA_BOOTSTRAP_ADMIN_EMAIL:-admin@example.com}
       ELASTRA_BOOTSTRAP_ADMIN_NAME: ${ELASTRA_BOOTSTRAP_ADMIN_NAME:-Elastra Admin}
       ELASTRA_BOOTSTRAP_ADMIN_PASSWORD: ${ELASTRA_BOOTSTRAP_ADMIN_PASSWORD:-adminadmin}
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-embeddinggemma}
     ports:
       - "${ELASTRA_HTTP_PORT:-8080}:8080"
     restart: unless-stopped
@@ -26,6 +28,8 @@ services:
         condition: service_started
       minio:
         condition: service_started
+      ollama-pull:
+        condition: service_completed_successfully
 
   worker:
     image: ${ELASTRA_IMAGE:-ghcr.io/elastraai/elastra}:${ELASTRA_VERSION:-latest}
@@ -35,6 +39,8 @@ services:
       POSTGRES_DSN: postgres://elastra:elastra@postgres:5432/elastra?sslmode=disable
       REDIS_PASSWORD: elastra
       ELASTRA_RUNTIME_EDITION: public
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-embeddinggemma}
     restart: unless-stopped
     depends_on:
       postgres:
@@ -45,6 +51,8 @@ services:
         condition: service_started
       minio:
         condition: service_started
+      ollama-pull:
+        condition: service_completed_successfully
 
   postgres:
     image: pgvector/pgvector:pg16
@@ -105,7 +113,31 @@ services:
       retries: 3
     restart: unless-stopped
 
+  ollama:
+    image: ollama/ollama:latest
+    expose:
+      - "11434"
+    volumes:
+      - public_ollamadata:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+    restart: unless-stopped
+
+  ollama-pull:
+    image: ollama/ollama:latest
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-embeddinggemma}
+    entrypoint: ["/bin/sh", "-lc", "ollama pull \"$${OLLAMA_EMBEDDING_MODEL}\""]
+    depends_on:
+      ollama:
+        condition: service_healthy
+
 volumes:
   public_pgdata:
   public_qdrantdata:
   public_miniodata:
+  public_ollamadata:
