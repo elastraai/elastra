@@ -124,7 +124,7 @@ services:
     volumes:
       - public_ollamadata:/root/.ollama
     healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost:11434/api/tags"]
+      test: ["CMD", "ollama", "list"]
       interval: 15s
       timeout: 10s
       retries: 20
